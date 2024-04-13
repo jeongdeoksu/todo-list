@@ -41,7 +41,6 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  // const [todos, setTodos] = useState(mockData);
   const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
 
@@ -55,13 +54,6 @@ function App() {
         date: new Date().getTime(),
       },
     });
-    // const newTodo = {
-    //   id: idRef.current++,
-    //   isDone: false,
-    //   content: content,
-    //   date: new Date().getTime(),
-    // };
-    // setTodos((prev) => [newTodo, ...prev]);
   };
 
   const onUpdate = (targetId) => {
@@ -69,11 +61,6 @@ function App() {
       type: "UPDATE",
       targetId: targetId,
     });
-    // setTodos((prev) =>
-    //   prev.map((todo) =>
-    //     todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo
-    //   )
-    // );
   };
 
   const onDelete = (targetId) => {
@@ -81,7 +68,6 @@ function App() {
       type: "DELETE",
       targetId: targetId,
     });
-    // setTodos((prev) => prev.filter((todo) => todo.id !== targetId));
   };
 
   return (
