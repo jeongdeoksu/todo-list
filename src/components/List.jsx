@@ -2,7 +2,7 @@ import './List.css';
 import TodoItem from './TodoItem.jsx';
 import { useState } from 'react';
 
-const List = ({ todos, onUpdate }) => {
+const List = ({ todos, onUpdate, onDelete }) => {
   const [search, setSearch] = useState('');
 
   const onChangeSearch = (e) => {
@@ -31,7 +31,14 @@ const List = ({ todos, onUpdate }) => {
       />
       <div className="todos_wrapper">
         {fiteredTodos.map((todo) => {
-          return <TodoItem key={todo.id} {...todo} onUpdate={onUpdate} />; // 스프레드 연산자
+          return (
+            <TodoItem
+              key={todo.id}
+              {...todo}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
+          ); // 스프레드 연산자
         })}
       </div>
     </div>
