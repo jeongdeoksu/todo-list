@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useReducer } from 'react';
 import './App.css';
 import Header from './components/Header.jsx';
 import Editor from './components/Editor.jsx';
@@ -25,38 +25,70 @@ const mockData = [
   },
 ];
 
+function reducer(state, action) {
+  switch (action.type) {
+    case 'CREATE':
+      return [action.data, ...state];
+    case 'UPDATE':
+      return state.map((item) =>
+        item.id === action.targetId ? { ...item, isDone: !item.isDone } : item,
+      );
+    case 'DELETE':
+      return state.filter((item) => item.id !== action.targetId);
+    default:
+      return state;
+  }
+}
+
 function App() {
-  const [todos, setTodos] = useState(mockData);
+  const [todos, dispatch] = useReducer(reducer, mockData);
   const isRef = useRef(3);
 
   const onCreate = (content) => {
-    const newTodos = {
-      id: isRef.current + 1,
-      isDone: false,
-      content: content,
-      date: new Date().getTime(),
-    };
-    setTodos([...todos, newTodos]);
+    // const newTodos = {
+    //   id: isRef.current + 1,
+    //   isDone: false,
+    //   content: content,
+    //   date: new Date().getTime(),
+    // };
+    // setTodos([...todos, newTodos]);
+    dispatch({
+      type: 'CREATE',
+      data: {
+        id: isRef.current++,
+        isDone: false,
+        content: content,
+        date: new Date().getTime(),
+      },
+    });
   };
 
   const onUpdate = (targetId) => {
-    setTodos(
-      // todos.map((todo) => {
-      //   if (todo.id === targetId) {
-      //     return { ...todo, isDone: !todo.isDone };
-      //   }
-      //   return todo;
-      // }),
-      todos.map((todo) =>
-        todo.id === targetId //
-          ? { ...todo, isDone: !todo.isDone } //
-          : todo,
-      ),
-    );
+    dispatch({
+      type: 'UPDATE',
+      targetId: targetId,
+    });
+    // setTodos(
+    //   // todos.map((todo) => {
+    //   //   if (todo.id === targetId) {
+    //   //     return { ...todo, isDone: !todo.isDone };
+    //   //   }
+    //   //   return todo;
+    //   // }),
+    //   todos.map((todo) =>
+    //     todo.id === targetId //
+    //       ? { ...todo, isDone: !todo.isDone } //
+    //       : todo,
+    //   ),
+    // );
   };
 
   const onDeleate = (targetId) => {
-    setTodos(todos.filter((todo) => todo.id !== targetId));
+    dispatch({
+      type: 'DELETE',
+      targetId: targetId,
+    });
+    // setTodos(todos.filter((todo) => todo.id !== targetId));
   };
 
   return (
